@@ -1,0 +1,147 @@
+{
+  "name": "replace-go-import",
+  "displayName": "Replace Go Import",
+  "description": "基于正则的 Go import 路径自动替换，支持豁免与一键处理",
+  "version": "0.1.4",
+  "publisher": "freedom-compile",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "go",
+    "golang",
+    "import",
+    "imports",
+    "replace",
+    "regex",
+    "refactor",
+    "module",
+    "gomod",
+    "gopath",
+    "vscode"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "replace-go-import.openSettings",
+        "title": "打开规则设置",
+        "category": "Replace Go Import"
+      },
+      {
+        "command": "replace-go-import.testRules",
+        "title": "测试规则",
+        "category": "Replace Go Import"
+      },
+      {
+        "command": "replace-go-import.processCurrentFile",
+        "title": "处理当前文件",
+        "category": "Replace Go Import"
+      }
+    ],
+    "configuration": {
+      "title": "Replace Go Import",
+      "properties": {
+        "replace-go-import.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用插件功能"
+        },
+        "replace-go-import.rules": {
+          "type": "array",
+          "default": [],
+          "description": "替换规则列表",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "规则名称"
+              },
+              "from": {
+                "type": "string",
+                "description": "源字符串"
+              },
+              "to": {
+                "type": "string",
+                "description": "目标字符串"
+              },
+              "exemptPaths": {
+                "type": "array",
+                "description": "豁免路径列表",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "enabled": {
+                "type": "boolean",
+                "description": "是否启用此规则"
+              }
+            }
+          }
+        },
+        "replace-go-import.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "显示操作通知"
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "replace-go-import.openSettings"
+        },
+        {
+          "command": "replace-go-import.testRules",
+          "when": "resourceExtname == .go"
+        },
+        {
+          "command": "replace-go-import.processCurrentFile",
+          "when": "resourceExtname == .go"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/freedom-compile/replace-go-import#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freedom-compile/replace-go-import.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freedom-compile/replace-go-import/issues"
+  },
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#0EA5E9",
+    "theme": "light"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@types/mocha": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "glob": "^7.1.7",
+    "mocha": "^9.2.2",
+    "typescript": "^4.9.4",
+    "@vscode/test-electron": "^2.3.0"
+  }
+}
