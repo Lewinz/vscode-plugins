@@ -1,148 +1,141 @@
 # Replace Go Import
 
-一个智能的VSCode插件，用于处理Go项目中的导入路径替换。支持正则表达式规则和路径豁免功能。
+🚀 **让 Go 项目导入路径管理变得简单高效**
 
-## 功能特性
+还在为 Go 项目中的导入路径替换而头疼？手动查找替换太麻烦，批量替换又怕出错？这个插件帮你一键搞定！
 
-- ✅ **规则配置**：支持 `A --> B` 的替换规则，A 支持正则表达式
-- ✅ **路径豁免**：每条规则可以设置豁免路径，豁免名单内的Go文件不进行替换
-- ✅ **作用范围控制**：可选择仅处理import语句或整个文件
-- ✅ **界面化管理**：提供友好的Web界面进行规则配置
-- ✅ **实时测试**：支持规则测试功能
-- ✅ **常见模式**：提供常用的正则表达式示例
+## ✨ 为什么需要这个插件？
 
-## 安装方法
+- 🔄 **开发环境切换**：本地开发时，需要将 `github.com/company/repo` 替换为 `./local/repo`
+- 🏢 **公司内部迁移**：将 GitHub 仓库迁移到公司内部 Git 服务器
+- 📦 **模块重构**：项目重构时批量更新导入路径
+- 🚫 **避免误改**：某些文件（如 vendor、test）不需要替换
 
-1. 克隆此仓库到本地
-2. 在VSCode中打开插件目录
-3. 按 `F5` 启动调试模式，或使用 `vsce package` 打包安装
+## 🎯 核心功能
 
-## 使用方法
+### 📝 智能替换
+- **正则表达式支持**：灵活匹配各种导入模式
+- **一键处理**：保存文件时自动替换，或手动处理当前文件
+- **安全可控**：支持路径豁免，避免误改重要文件
 
-### 1. 打开设置界面
+### 🎛️ 简单配置
+- **可视化界面**：无需手写配置文件，图形化设置规则
+- **实时测试**：配置规则后立即测试效果
+- **批量管理**：支持多条规则同时生效
 
-- 使用命令面板 (`Ctrl+Shift+P` 或 `Cmd+Shift+P`)
+### 🛡️ 安全可靠
+- **路径豁免**：vendor、test、mocks 等目录自动排除
+- **作用域控制**：可选择只处理 import 语句或整个文件
+- **备份建议**：重要项目使用前建议先备份
+
+## 🚀 快速开始
+
+### 1️⃣ 安装插件
+在 VS Code 扩展商店搜索 "Replace Go Import" 并安装
+
+### 2️⃣ 打开配置界面
+- 按 `Ctrl+Shift+P`（Mac: `Cmd+Shift+P`）
 - 输入 "Replace Go Import: 打开规则设置"
-- 或右键Go文件选择相应命令
+- 或右键 Go 文件选择相应命令
 
-### 2. 配置规则
+### 3️⃣ 配置替换规则
+在配置界面中：
 
-在设置界面中：
+**全局设置**
+- ✅ 启用插件功能
+- 🎯 选择作用范围：仅 import 语句 或 整个文件
 
-1. **全局设置**
-   - 启用/禁用插件
-   - 选择作用范围（imports/all）
+**添加规则**
+- 📝 规则名称：给规则起个好记的名字
+- 🔍 匹配模式：要替换的导入路径（支持正则）
+- ➡️ 替换内容：替换后的新路径
+- 🚫 豁免路径：不需要替换的文件/目录
+- ✅ 启用规则：是否立即生效
 
-2. **添加替换规则**
-   - 规则名称：便于识别的名称
-   - 正则表达式：匹配模式
-   - 替换内容：替换后的内容
-   - 豁免路径：不应用此规则的路径模式
-   - 启用状态：是否启用此规则
+## 💡 使用场景示例
 
-### 3. 常见正则表达式示例
+### 🏠 场景1：本地开发环境
+**需求**：本地开发时使用本地仓库，而不是远程 GitHub 仓库
 
+**配置**：
+- 匹配模式：`github\.com/mycompany/project`
+- 替换内容：`./local/project`
+- 豁免路径：`**/vendor/**`, `**/test/**`
+
+**效果**：
+```go
+// 替换前
+import "github.com/mycompany/project/utils"
+
+// 替换后  
+import "./local/project/utils"
+```
+
+### 🏢 场景2：公司内部迁移
+**需求**：将 GitHub 仓库迁移到公司内部 Git 服务器
+
+**配置**：
+- 匹配模式：`github\.com/mycompany/(.*)`
+- 替换内容：`git.company.com/mycompany/$1`
+- 豁免路径：`**/vendor/**`
+
+**效果**：
+```go
+// 替换前
+import "github.com/mycompany/api"
+import "github.com/mycompany/utils"
+
+// 替换后
+import "git.company.com/mycompany/api"
+import "git.company.com/mycompany/utils"
+```
+
+### 📦 场景3：模块版本升级
+**需求**：将 v1 版本的模块升级到 v2
+
+**配置**：
+- 匹配模式：`github\.com/company/module/v1`
+- 替换内容：`github.com/company/module/v2`
+- 豁免路径：`**/examples/**`, `**/test/**`
+
+## 🔧 高级配置
+
+### 正则表达式参考
 | 模式 | 说明 | 示例 |
 |------|------|------|
-| `github\.com/company/repo` | 匹配特定的GitHub仓库 | `github.com/company/repo` |
-| `github\.com/company/.*` | 匹配公司下的所有仓库 | `github.com/company/any-repo` |
-| `.*/internal/.*` | 匹配所有internal包 | `github.com/company/internal/utils` |
+| `github\.com/company/repo` | 精确匹配 | `github.com/company/repo` |
+| `github\.com/company/.*` | 匹配公司下所有仓库 | `github.com/company/any-repo` |
+| `.*/internal/.*` | 匹配所有 internal 包 | `github.com/company/internal/utils` |
 | `github\.com/.*/v\d+` | 匹配带版本号的包 | `github.com/company/repo/v2` |
-| `\./.*` | 匹配相对路径 | `./local/repo` |
-| `/.*` | 匹配绝对路径 | `/usr/local/repo` |
 
-### 4. 豁免路径模式
+### 豁免路径模式
+支持通配符模式，常用示例：
+- `**/vendor/**` - 排除 vendor 目录
+- `**/test/**` - 排除测试文件
+- `**/examples/**` - 排除示例代码
+- `**/mocks/**` - 排除模拟文件
 
-支持简单的通配符模式：
-
-- `**/vendor/**` - 豁免vendor目录下的所有文件
-- `**/test/**` - 豁免test目录下的所有文件
-- `**/examples/**` - 豁免examples目录下的所有文件
-- `**/mocks/**` - 豁免mocks目录下的所有文件
-
-## 工作原理
-
-1. **触发时机**：当保存Go文件时自动触发
-2. **文件检查**：检查文件是否在豁免路径中
-3. **规则应用**：根据作用范围设置处理文件内容
-4. **正则替换**：应用匹配的规则进行替换
-5. **结果反馈**：显示替换结果和详情
-
-## 配置示例
-
-### 示例1：本地开发替换
-
-```json
-{
-  "name": "本地开发替换",
-  "pattern": "github\\.com/company/repo",
-  "replacement": "./local/repo",
-  "exemptPaths": [
-    "**/vendor/**",
-    "**/test/**"
-  ],
-  "enabled": true
-}
-```
-
-### 示例2：公司内部包替换
-
-```json
-{
-  "name": "内部包替换",
-  "pattern": "github\\.com/company/.*",
-  "replacement": "git.company.com/company/$1",
-  "exemptPaths": [
-    "**/vendor/**"
-  ],
-  "enabled": true
-}
-```
-
-## 命令
+## ⚡ 快捷命令
 
 - `Replace Go Import: 打开规则设置` - 打开配置界面
-- `Replace Go Import: 测试规则` - 测试当前配置的规则
+- `Replace Go Import: 测试规则` - 测试当前配置
+- `Replace Go Import: 处理当前文件` - 手动处理当前 Go 文件
 
-## 注意事项
+## ⚠️ 注意事项
 
-1. **正则表达式**：请确保正则表达式语法正确，可以使用在线工具验证
-2. **豁免路径**：豁免路径使用简单的通配符模式，不支持复杂的正则表达式
-3. **备份**：建议在重要项目中使用前先备份代码
-4. **测试**：使用测试功能验证规则是否正确
+1. **备份重要**：在重要项目中使用前，建议先备份代码
+2. **测试先行**：使用"测试规则"功能验证配置是否正确
+3. **正则语法**：确保正则表达式语法正确，可使用在线工具验证
+4. **豁免路径**：使用通配符模式，不支持复杂正则表达式
 
-## 开发说明
+## 🤝 贡献
 
-### 项目结构
+欢迎提交 Issue 和 Pull Request！
 
-```
-src/
-├── extension.ts      # 主扩展文件
-├── ruleManager.ts    # 规则管理器
-├── configUI.ts       # 配置界面
-└── types.ts          # 类型定义
-```
+- 🐛 发现问题？请提交 Issue
+- 💡 有改进建议？欢迎 Pull Request
+- 📧 联系方式：通过 GitHub Issues 联系
 
-### 构建和调试
+## 📄 许可证
 
-```bash
-# 安装依赖
-npm install
-
-# 编译
-npm run compile
-
-# 监听模式
-npm run watch
-
-# 打包
-vsce package
-```
-
-## 许可证
-
-MIT License
-
-## 贡献
-
-欢迎提交Issue和Pull Request！
+MIT License - 详见 [LICENSE](LICENSE) 文件

@@ -1,8 +1,8 @@
 {
   "name": "replace-go-import",
   "displayName": "Replace Go Import",
-  "description": "基于正则的 Go import 路径自动替换，支持豁免与一键处理",
-  "version": "0.1.4",
+  "description": "🚀 让 Go 项目导入路径管理变得简单高效 - 支持正则替换、路径豁免、可视化配置",
+  "version": "0.2.1",
   "publisher": "freedom-compile",
   "engines": {
     "vscode": "^1.74.0"
